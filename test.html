@@ -1,48 +1,106 @@
+<!--
+    需求：
+        用户注册页面要有用户名、密码、确认密码、邮箱
+        用户名文本框：用户名不能为空，且必须为数字与字母的6到12位的组合
+        密码框：密码不能为空，最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符
+        确认密码框：确认密码不能为空，最少6位，包括至少1个大写字母，1个小写字母，1个数字，1个特殊字符，并且要和密码框中的内容保持一致
+        邮箱框：邮箱需要输入正确的邮箱格式并且不能为空
+-->
 <!DOCTYPE html>
 <html>
-<body background="LJandJJ.jpg">
+<head>
+    <meta charset="utf-8"/>
+    <title>JQUERY</title>
+    <script src="jquery-3.3.1.js"></script>
+    <script src="zTree-zTree_v3-master/jquery.ztree.all.js"></script>
+    <link rel="stylesheet" type="text/css" href="zTree-zTree_v3-master/demo.css">
+    <link rel="stylesheet" type="text/css" href="zTree-zTree_v3-master/zTreeStyle.css">
+    <!--rel并不能省略，省略了就看不到小图片的显示了-->
+</head>
 
-<div style="text-align:center;">
-    //这里是修改测试
-    <button onclick="playPause()">播放/暂停</button>
-    <button onclick="makeBig()">大</button>
-    <button onclick="makeNormal()">中</button>
-    <button onclick="makeSmall()">小</button>
-    <br />
-    <video id="video1" width="600" style="margin-top:15px;">
-        <source src="VID.mp4" type="video/mp4" />
-        <source src="VID.ogg" type="video/ogg" />
-        <source src="VID.ogg" type="video/ogg" />
-        Your browser does not support HTML5 video.
-    </video>
-</div>
+<body>
 
-<script type="text/javascript">
-    var myVideo=document.getElementById("video1");
+<TABLE border=0 height=600px align=left>
+    <TR>
+        <TD width=260px align="left" valign="bottom" style="BORDER-RIGHT: #999999 1px dashed">
+            <ul id="treeDemo" class="ztree" style="width:260px; overflow:auto;"></ul>
+        </TD>
+        <TD width=770px align="left" valign="bottom">
+            <IFRAME ID="testIframe" Name="testIframe" FRAMEBORDER=0 SCROLLING=AUTO width=100%
+                    SRC="testA.html"></IFRAME>
+        </TD>
+    </TR>
+</TABLE>
 
-    function playPause()
-    {
-        if (myVideo.paused)
-            myVideo.play();
-        else
-            myVideo.pause();
-    }
-
-    function makeBig()
-    {
-        myVideo.width=560;
-    }
-
-    function makeSmall()
-    {
-        myVideo.width=320;
-    }
-
-    function makeNormal()
-    {
-        myVideo.width=420;
-    }
-</script>
-
+<!--<table border=0 height=600px align=left>-->
+    <!--<tr>-->
+        <!--<td  width=260px align=left valign=top style="BORDER-RIGHT: blue 1px dashed">-->
+            <!--<ul id="treeDemo" class="ztree" style="width:260px; overflow:auto;"></ul>-->
+        <!--</td>-->
+        <!--<td width=770px align=left valign=top>-->
+            <!--<iframe id="testIframe" name="testIframe" frameborder=0 scrolling=AUTO width=100% height=600px-->
+                          <!--src="testA.html" style="background: red"></iframe>-->
+        <!--</td>-->
+    <!--</tr>-->
+<!--</table>-->
 </body>
+<script type="text/javascript">
+    var setting = {
+        view:{
+            dblClickExpand:true,
+            showLine:true,
+            selectedMulti:false,
+        },
+        data:{
+            simpleData:{
+                enable:false
+            }
+        },
+        callback:{
+            beforeClick: function(treeId,treeNode){
+                var zTree = $.fn.zTree.getZTreeObj("treeDemo");
+                if(treeNode.isParent){
+                    zTree.expandNode(treeNode);
+                    return false;
+                }else{
+                    $("#testIframe").attr("src", treeNode.file);
+                    return true;
+                }
+            }
+        }
+    };
+    var zNodes = [
+        {
+            name: "一级菜单1",
+            children: [
+                {
+                    name: "孩子菜单1",
+                    file:"testA.html"
+                }, {
+                    name: "孩子菜单2",
+                    file:"testB.html"
+                }, {
+                    name: "孩子菜单3",
+                    file:"testC.html"
+                }
+            ]
+        },
+        {
+            name: "一级菜单2"
+        },
+        {
+            name: "一级菜单3"
+        }
+    ];
+    // var zNodes=[
+    //     {id:1, pId:0, name:"一级菜单1", open:true},
+    //     {id:11,pId:1,name:"二级菜单11"},
+    //     {id:12,pId:1,name:"二级菜单12"},
+    //     {id:2,pId:0,name:"一级菜单2"},
+    //     {id:3,pId:0,name:"一级菜单2"}
+    // ];
+    $(function(){$.fn.zTree.init($("#treeDemo"),setting,zNodes)});
+</script>
 </html>
+
+
